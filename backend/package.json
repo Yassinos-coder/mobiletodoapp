@@ -1,0 +1,13 @@
+{
+  "name": "mobiletodoappbackend",
+  "version": "1.0.0",
+  "main": "core.js",
+  "author": "Yassinos-Coder",
+  "license": "GNU",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "expressjs": "^1.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.1.0"
+  }
+}

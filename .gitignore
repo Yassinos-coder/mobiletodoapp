@@ -1,0 +1,25 @@
+# Back End Ignore Folders & Files
+backend/node_modules
+backend/.env
+
+
+
+# Front End Ignore Folders & Files
+frontend/node_modules
+frontend/yarn.lock
+frontend/.expo
+frontend/dist
+frontend/npm-debug.*
+frontend/*.jks
+frontend/*.p8
+frontend/*.p12
+frontend/*.key
+frontend/*.mobileprovision
+frontend/*.orig.*
+frontend/web-build/
+
+# macOS
+frontend/.DS_Store
+
+# Temporary files created by Metro to check the health of the file watcher
+frontend/.metro-health-check*
