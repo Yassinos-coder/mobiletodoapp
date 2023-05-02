@@ -2,6 +2,7 @@ const express = require("express");
 const fileupload = require("express-fileupload");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const UsersAPI = require('./APIs/UsersAPI')
 require("dotenv").config();
 
 let db_connection_success;
@@ -44,3 +45,5 @@ app.get("/backStatus", async (req, res) => {
     });
   }
 });
+
+app.use(UsersAPI)

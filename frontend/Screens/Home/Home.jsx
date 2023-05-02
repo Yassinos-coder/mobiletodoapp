@@ -1,15 +1,9 @@
-import {
-  Button,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-function Home() {
+function Home({navigation}) {
+
   return (
     <SafeAreaView style={styles.Home}>
       <View>
@@ -21,11 +15,15 @@ function Home() {
           Welcome to <Text style={styles.titleWord}>The Organizer</Text>
         </Text>
         <View style={styles.actionsView}>
-          <TouchableOpacity style={styles.SignUp}>
-            <Text style={{fontSize: 30, color:'#fff', textAlign:'center'}}>Sign Up</Text>
+          <TouchableOpacity style={styles.SignUp} onPress={() => navigation.navigate('Signup')}>
+            <Text style={styles.buttonText}>
+              Sign Up
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.LogIn}>
-            <Text style={{fontSize: 30, color:'#fff', textAlign:'center'}}>Log In</Text>
+          <TouchableOpacity style={styles.LogIn} onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.buttonText}>
+              Log In
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -38,43 +36,56 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+
   logoHome: {
     width: 200,
     height: 200,
+    marginTop: 100,
     marginLeft: 90,
   },
+
   titleHome: {
     fontSize: 30,
     textAlign: "center",
     marginTop: 50,
   },
+
   titleWord: {
-    color: "red",
+    color: "#2c96ff",
     fontWeight: "900",
   },
+
   actionsView: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 50,
     marginLeft: 15,
     maxWidth: 350,
-    alignItems: 'center',
+    alignItems: "center",
   },
-  SignUp : {
+
+  SignUp: {
     fontSize: 30,
-    backgroundColor: "grey",
-    color: 'white',
+    backgroundColor: "#2c96ff",
+    color: "white",
     borderRadius: 5,
     padding: 7,
     width: 150,
   },
-  LogIn : {
+
+  LogIn: {
     fontSize: 30,
-    backgroundColor: "grey",
-    color: 'white',
+    backgroundColor: "#2c96ff",
+    color: "white",
     borderRadius: 5,
     padding: 7,
     width: 150,
+  },
+
+  buttonText: {
+    fontSize: 30,
+    color: "#fff",
+    textAlign: "center",
   },
 });
 
