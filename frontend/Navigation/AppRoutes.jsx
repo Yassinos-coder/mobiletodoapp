@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../Screens/Home/Home';
 import Login from '../Screens/Login/Login';
 import Signup from '../Screens/Signup/Signup';
+import Dashboard from '../Screens/Dashboard/Dashboard';
 
 const Stack = createStackNavigator();
 
@@ -12,6 +13,7 @@ const AppRoutes = () => {
       <Stack.Screen name="Home" component={Home} options={{title: null}}/>
       <Stack.Screen name='Login' component={Login}  options={{title: null, headerLeft: null}}/>
       <Stack.Screen name='Signup' component={Signup}  options={{title: null, headerLeft: null}}/>
+      <Stack.Screen name='Dashboard' component={Dashboard}  options={{title: null, headerLeft: null}}/>
     </Stack.Navigator>
   );
 };
