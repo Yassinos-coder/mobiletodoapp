@@ -1,18 +1,17 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
-import {
-  FontAwesomeIcon,
-  FontAwesomeIconStyle,
-} from "@fortawesome/react-native-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Button } from "@react-native-material/core";
 
 const Dashboard = ({ navigation }) => {
   const userData = useSelector((state) => state.UserReducer.userData);
   const userFirstname = userData.flname.split(" ")[0];
+  const date = new Date();
+  const TodayDate = date.toLocaleDateString("en-GB");
 
   return (
     <SafeAreaView style={DashboardStyles.Dashboard}>
@@ -48,6 +47,12 @@ const Dashboard = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      <View style={DashboardStyles.todoView}>
+        <View style={DashboardStyles.todoHeader}>
+          <Text style={DashboardStyles.todayDate}>{TodayDate}</Text>
+          <Button title='Add Todo' style={DashboardStyles.addTodoBtn} />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -62,6 +67,8 @@ const DashboardStyles = StyleSheet.create({
   header: {
     backgroundColor: "#2c96ff",
     height: 70,
+    position: "relative",
+    top: 5,
   },
   leftSide: {
     // backgroundColor: 'red',
@@ -101,5 +108,32 @@ const DashboardStyles = StyleSheet.create({
     color: "#fff",
     top: 15,
     left: 30,
+  },
+  todoView: {
+    position: "relative",
+    top: 20,
+  },
+  todoHeader: {
+    backgroundColor: "#FFFCF2",
+    position: "relative",
+    top: 10,
+    left: 10,
+    width: 365,
+    borderRadius: 50,
+    height: 70,
+  },
+  todayDate: {
+    fontSize: 25,
+    fontWeight: "600",
+    left: 10,
+    lineHeight: 65,
+  },
+  addTodoBtn: {
+    position: 'absolute',
+    backgroundColor: "#2c96ff",
+    width: 120,
+    top: 15,
+    left: 220,
+    height: 35,
   },
 });

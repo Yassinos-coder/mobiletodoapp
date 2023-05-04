@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Stack, TextInput } from "@react-native-material/core";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { LoginUser } from "../../redux/UserReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -11,18 +11,22 @@ const Login = ({ navigation }) => {
   const [loginCreds, setLoginCreds] = useState({});
 
   const handleLogin = () => {
-    dispatch(LoginUser({ userCreds: loginCreds })).then(async (data) => {
-      if (data.payload.giveAccess) {
-        try {
-          await AsyncStorage.setItem("tokenKey", data.payload.token);
-          navigation.navigate("Dashboard");
-        } catch (e) {
-          console.log("Error storing token:", e);
+    if (!loginCreds.emailLogin || !loginCreds.password) {
+      alert("Email & Password cannot be empty !");
+    } else {
+      dispatch(LoginUser({ userCreds: loginCreds })).then(async (data) => {
+        if (data.payload.giveAccess) {
+          try {
+            await AsyncStorage.setItem("tokenKey", data.payload.token);
+            navigation.navigate("Dashboard");
+          } catch (e) {
+            console.log("Error storing token:", e);
+          }
+        } else {
+          alert("Email or Password incorrect. Please Try Again !");
         }
-      } else {
-        alert("Email or Password incorrect. Please Try Again !");
-      }
-    });
+      });
+    }
   };
 
   return (
@@ -86,5 +90,6 @@ const loginStyles = StyleSheet.create({
   loginButton: {
     width: 200,
     height: 50,
+    backgroundColor: "#2c96ff",
   },
 });
