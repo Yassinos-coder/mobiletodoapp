@@ -38,7 +38,7 @@ const Signup = ({navigation}) => {
           textContentType="emailAddress"
           value={newUser.email}
           onChangeText={(text) => {
-            setNewUser({ ...newUser, email: text });
+            setNewUser({ ...newUser, email: text.toLowerCase() });
           }}
         />
         <TextInput

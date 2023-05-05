@@ -5,10 +5,14 @@ import { Button, Stack, TextInput } from "@react-native-material/core";
 import { useDispatch } from "react-redux";
 import { LoginUser } from "../../redux/UserReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { text } from "@fortawesome/fontawesome-svg-core";
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const [loginCreds, setLoginCreds] = useState({});
+  const [userEmail, setUserEmail] = useState('')
+  const [userPass, setUserPass] = useState('')
+
 
   const handleLogin = () => {
     if (!loginCreds.emailLogin || !loginCreds.password) {
@@ -18,6 +22,7 @@ const Login = ({ navigation }) => {
         if (data.payload.giveAccess) {
           try {
             await AsyncStorage.setItem("tokenKey", data.payload.token);
+            await AsyncStorage.setItem("uuid", data.payload.user._id);
             navigation.navigate("Dashboard");
           } catch (e) {
             console.log("Error storing token:", e);
@@ -37,13 +42,14 @@ const Login = ({ navigation }) => {
       <View style={loginStyles.loginInput}>
         <TextInput
           variant="outlined"
-          label="Username Or Email"
+          value={userEmail}
+          label='Email'
           style={{ margin: 16 }}
           fontSize={20}
           textContentType="emailAddress"
-          value={loginCreds.emailLogin}
           onChangeText={(text) => {
-            setLoginCreds({ ...loginCreds, emailLogin: text });
+            setUserEmail(text)
+            setLoginCreds({ ...loginCreds, emailLogin: text.toLowerCase() });
           }}
         />
         <TextInput
@@ -52,8 +58,9 @@ const Login = ({ navigation }) => {
           style={{ margin: 16 }}
           fontSize={20}
           secureTextEntry={true}
-          value={loginCreds.password}
+          value={userPass}
           onChangeText={(password) => {
+            setUserPass(password)
             setLoginCreds({ ...loginCreds, password: password });
           }}
         />

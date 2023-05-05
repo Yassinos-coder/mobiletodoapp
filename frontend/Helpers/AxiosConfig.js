@@ -6,15 +6,9 @@ const AxiosConfig = axios.create({
 });
 
 AxiosConfig.interceptors.request.use(
-  (config) => {
+  async(config) => {
     let token;
-    const getToken = async () => {
-      try {
-        token = await AsyncStorage.getItem("tokenKey");
-      } catch (e) {
-        console.log("Error retrieving token:", e);
-      }
-    };
+    token = await AsyncStorage.getItem("tokenKey");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
