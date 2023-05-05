@@ -45,7 +45,6 @@ const Dashboard = ({ navigation }) => {
         alert("Error performing this task. Please try again !");
       }
     });
-    console.log(newTodo);
     setVisibleTodoAdd(false);
   };
 
