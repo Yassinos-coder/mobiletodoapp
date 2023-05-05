@@ -28,7 +28,7 @@ usersAPI.post("/users/AddUser", async (req, res) => {
 usersAPI.post("/users/Signin", async(req, res) => {
     let userCreds = req.body
     try {
-        console.log(userCreds)
+        // console.log(userCreds)
         const result = await UserModel.findOne({email: userCreds.emailLogin})
         if (result) {
             const passComparaison = await bcrypt.compare(userCreds.password, result.password)

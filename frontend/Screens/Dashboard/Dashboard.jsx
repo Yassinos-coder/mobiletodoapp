@@ -28,29 +28,25 @@ const Dashboard = ({ navigation }) => {
   const date = new Date();
   const TodayDate = date.toLocaleDateString("en-GB");
   const [newTodo, setNewTodo] = useState(new TodoModal());
+  const uuid = AsyncStorage.getItem("uuid");
 
-  const handleTimePick = async (event, selectedTime) => {
+  const handleTimePick = (event) => {
+    const timestamp = event.nativeEvent.timestamp;
+    const date = new Date(timestamp);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    setNewTodo({ ...newTodo, due_at: `${hours}:${minutes}` });
     setshowTimePicker(false);
-    setVisibleTodoAdd(false);
-    const uuid = await AsyncStorage.getItem("uuid");
-    let time = selectedTime.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    setNewTodo({
-      ...newTodo,
-      due_at: time,
-      created_at: TodayDate,
-      ownerID: uuid,
-    });
-    console.log(selectedTime);
-    // dispatch(AddTodo({ newTodoData: newTodo })).then((data) => {
-    //   if (data.payload.message === "error") {
-    //     alert("Error performing this task. Please try again !");
-    //   }
-    // });
+  };
 
+  const sendNewTodo = () => {
+    dispatch(AddTodo({ newTodoData: newTodo })).then((data) => {
+      if (data.payload.message === "error") {
+        alert("Error performing this task. Please try again !");
+      }
+    });
     console.log(newTodo);
+    setVisibleTodoAdd(false);
   };
 
   return (
@@ -111,7 +107,12 @@ const Dashboard = ({ navigation }) => {
                   <TextInput
                     label="Task"
                     onChangeText={(text) => {
-                      setNewTodo({ ...newTodo, task: text });
+                      setNewTodo({
+                        ...newTodo,
+                        task: text,
+                        created_at: TodayDate,
+                        ownerID: uuid._j,
+                      });
                     }}
                   />
                   {showTimePicker && (
@@ -119,8 +120,9 @@ const Dashboard = ({ navigation }) => {
                       mode="time"
                       value={new Date(1598051730000)}
                       is24Hour={true}
-                      onChange={handleTimePick}
-                      onDateChange={() => console.log("test")}
+                      onChange={(event) => {
+                        handleTimePick(event);
+                      }}
                     />
                   )}
                 </Stack>
@@ -134,15 +136,19 @@ const Dashboard = ({ navigation }) => {
                   titleStyle={{ color: "red" }}
                 />
                 <Button
-                  title="Pick Due Hour"
+                  title={newTodo.due_at === '' ? 'Pick due time' : 'Add Todo'}
                   compact
                   variant="text"
                   onPress={() => {
-                    setshowTimePicker(true);
+                    if (newTodo.due_at === '') {
+                      setshowTimePicker(true);
+                    } else {
+                      sendNewTodo()
+                    }
                   }}
-                  titleStyle={{ color:'#2c96ff' }}
-                  disabled={newTodo.task === '' ? true : false}
-                  disabledStyle={{color:'grey'}}
+                  titleStyle={{ color: "#2c96ff" }}
+                  disabled={newTodo.task === "" ? true : false}
+                  disabledStyle={{ color: "grey" }}
                 />
               </DialogActions>
             </Dialog>
