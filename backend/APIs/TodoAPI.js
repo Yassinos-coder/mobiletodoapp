@@ -27,5 +27,17 @@ todoAPI.post('/todos/AddTodo', APIAuth, async(req, res) => {
     }
 })
 
+todoAPI.delete('/todos/DeleteTask/:uuid/:taskID', APIAuth, async(req, res) => {
+    let taskID = req.params.taskID
+    let uuid = req.params.uuid
+    try {
+       await TodoModel.deleteOne({_id: taskID}) 
+       const updatedTodoList = await TodoModel.find({ownerID: uuid})
+       res.send({message:'succes', todoList: updatedTodoList})
+    } catch (err) {
+        console.error(`DeleteTask API ${err}`)
+    }
+})
+
 
 module.exports = todoAPI

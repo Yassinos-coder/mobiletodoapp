@@ -17,13 +17,28 @@ export const AddTodo = createAsyncThunk(
   "todos/AddTodo",
   async ({ newTodoData }) => {
     try {
-      const respone = await AxiosConfig.post("/todos/AddTodo", newTodoData);
-      return respone.data;
+      const response = await AxiosConfig.post("/todos/AddTodo", newTodoData);
+      return response.data;
     } catch (err) {
       console.error(`Error in AddTodo Reducer ${err}`);
     }
   }
 );
+
+export const DeleteTask = createAsyncThunk(
+  "todos/DeleteTask",
+  async ({ uuid, taskID }) => {
+    try {
+      const response = await AxiosConfig.delete(
+        `/todos/DeleteTask/${uuid}/${taskID}`
+      );
+      return response.data;
+    } catch (err) {
+      console.error(`Error in DeleteTask Reducer ${err}`);
+    }
+  }
+);
+
 const TodoReducer = createSlice({
   name: "TodoHandler",
   initialState: {
@@ -52,6 +67,16 @@ const TodoReducer = createSlice({
         state.status = "pending";
       })
       .addCase(AddTodo.rejected, (state) => {
+        state.status = "rejected";
+      })
+      .addCase(DeleteTask.fulfilled, (state, action) => {
+        state.status = "accepted";
+        state.userTodos = action.payload.todoList
+      })
+      .addCase(DeleteTask.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(DeleteTask.rejected, (state) => {
         state.status = "rejected";
       });
   },

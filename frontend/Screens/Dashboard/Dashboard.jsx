@@ -17,18 +17,25 @@ import {
 } from "@react-native-material/core";
 import TodoModal from "../../Modals/TodoModal";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { AddTodo } from "../../redux/TodoReducer";
+import { AddTodo, getUserTodos } from "../../redux/TodoReducer";
+import { useEffect } from "react";
+import TodoBar from "../../Components/TodoBar";
 
 const Dashboard = ({ navigation }) => {
   const dispatch = useDispatch();
+  const userTodoList = useSelector((state) => state.TodoReducer.userTodos)
   const [visibleTodoAdd, setVisibleTodoAdd] = useState(false);
   const [showTimePicker, setshowTimePicker] = useState(false);
   const userData = useSelector((state) => state.UserReducer.userData);
-  const userFirstname = userData.flname.split(" ")[0];
+  const userFirstname = userData.flname ? userData.flname.split(" ")[0] : 'error'
   const date = new Date();
   const TodayDate = date.toLocaleDateString("en-GB");
   const [newTodo, setNewTodo] = useState(new TodoModal());
   const uuid = AsyncStorage.getItem("uuid");
+
+  useEffect(() => {
+    dispatch(getUserTodos({uuid: userData._id}))
+  },[])
 
   const handleTimePick = (event) => {
     const timestamp = event.nativeEvent.timestamp;
@@ -95,10 +102,7 @@ const Dashboard = ({ navigation }) => {
             />
           </View>
           <View style={DashboardStyles.todoAddDialog}>
-            <Dialog
-              visible={visibleTodoAdd}
-              onDismiss={() => setVisibleTodoAdd(false)}
-            >
+            <Dialog visible={visibleTodoAdd}>
               <DialogHeader title="Add Todo" />
               <DialogContent>
                 <Stack spacing={2}>
@@ -135,14 +139,14 @@ const Dashboard = ({ navigation }) => {
                   titleStyle={{ color: "red" }}
                 />
                 <Button
-                  title={newTodo.due_at === '' ? 'Pick due time' : 'Add Todo'}
+                  title={newTodo.due_at === "" ? "Pick due time" : "Add Todo"}
                   compact
                   variant="text"
                   onPress={() => {
-                    if (newTodo.due_at === '') {
+                    if (newTodo.due_at === "") {
                       setshowTimePicker(true);
                     } else {
-                      sendNewTodo()
+                      sendNewTodo();
                     }
                   }}
                   titleStyle={{ color: "#2c96ff" }}
@@ -151,6 +155,13 @@ const Dashboard = ({ navigation }) => {
                 />
               </DialogActions>
             </Dialog>
+          </View>
+          <View style={DashboardStyles.todoSpace}>
+                  {
+                    userTodoList.map((todo, index) => (
+                      <TodoBar key={index} taskData={todo} indexKey={index} task={todo.task} created_at={todo.created_at} due_at={todo.due_at}/>
+                    ))
+                  }
           </View>
         </View>
       </SafeAreaView>
@@ -236,4 +247,10 @@ const DashboardStyles = StyleSheet.create({
     height: 35,
   },
   todoAddDialog: {},
+  todoSpace: {
+    position: 'relative',
+    left: 10,
+    top: 50,
+    width: 365,
+  },
 });

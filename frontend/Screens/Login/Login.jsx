@@ -23,6 +23,8 @@ const Login = ({ navigation }) => {
           try {
             await AsyncStorage.setItem("tokenKey", data.payload.token);
             await AsyncStorage.setItem("uuid", data.payload.user._id);
+            await AsyncStorage.setItem("userFullName", data.payload.user.flname);
+
             navigation.navigate("Dashboard");
           } catch (e) {
             console.log("Error storing token:", e);
