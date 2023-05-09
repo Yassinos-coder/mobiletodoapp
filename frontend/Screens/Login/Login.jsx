@@ -5,7 +5,6 @@ import { Button, Stack, TextInput } from "@react-native-material/core";
 import { useDispatch } from "react-redux";
 import { LoginUser } from "../../redux/UserReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { text } from "@fortawesome/fontawesome-svg-core";
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -24,6 +23,8 @@ const Login = ({ navigation }) => {
             await AsyncStorage.setItem("tokenKey", data.payload.token);
             await AsyncStorage.setItem("uuid", data.payload.user._id);
             await AsyncStorage.setItem("userFullName", data.payload.user.flname);
+            await AsyncStorage.setItem("isConnected", '1');
+
 
             navigation.navigate("Dashboard");
           } catch (e) {

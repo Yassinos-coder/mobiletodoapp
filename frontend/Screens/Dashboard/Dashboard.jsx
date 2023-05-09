@@ -23,19 +23,21 @@ import TodoBar from "../../Components/TodoBar";
 
 const Dashboard = ({ navigation }) => {
   const dispatch = useDispatch();
-  const userTodoList = useSelector((state) => state.TodoReducer.userTodos)
+  const userTodoList = useSelector((state) => state.TodoReducer.userTodos);
   const [visibleTodoAdd, setVisibleTodoAdd] = useState(false);
   const [showTimePicker, setshowTimePicker] = useState(false);
   const userData = useSelector((state) => state.UserReducer.userData);
-  const userFirstname = userData.flname ? userData.flname.split(" ")[0] : 'error'
+  const userFirstname = userData.flname
+    ? userData.flname.split(" ")[0]
+    : "error";
   const date = new Date();
   const TodayDate = date.toLocaleDateString("en-GB");
   const [newTodo, setNewTodo] = useState(new TodoModal());
   const uuid = AsyncStorage.getItem("uuid");
 
   useEffect(() => {
-    dispatch(getUserTodos({uuid: userData._id}))
-  },[])
+    dispatch(getUserTodos({ uuid: userData._id }));
+  }, []);
 
   const handleTimePick = (event) => {
     const timestamp = event.nativeEvent.timestamp;
@@ -51,7 +53,7 @@ const Dashboard = ({ navigation }) => {
       if (data.payload.message === "error") {
         alert("Error performing this task. Please try again !");
       }
-      setNewTodo({...newTodo, due_at: ''})
+      setNewTodo({ ...newTodo, due_at: "" });
     });
     setVisibleTodoAdd(false);
   };
@@ -158,11 +160,20 @@ const Dashboard = ({ navigation }) => {
             </Dialog>
           </View>
           <View style={DashboardStyles.todoSpace}>
-                  {
-                    userTodoList.map((todo, index) => (
-                      <TodoBar key={index} taskData={todo} indexKey={index} task={todo.task} created_at={todo.created_at} due_at={todo.due_at}/>
-                    ))
-                  }
+            {userTodoList.length === 0 ? (
+              <Text style={DashboardStyles.noTodo}>Task list is empty {"\n"} Create a task 📝!</Text>
+            ) : (
+              userTodoList.map((todo, index) => (
+                <TodoBar
+                  key={index}
+                  taskData={todo}
+                  indexKey={index}
+                  task={todo.task}
+                  created_at={todo.created_at}
+                  due_at={todo.due_at}
+                />
+              ))
+            )}
           </View>
         </View>
       </SafeAreaView>
@@ -180,6 +191,7 @@ const DashboardStyles = StyleSheet.create({
   header: {
     backgroundColor: "#2c96ff",
     height: 70,
+    flexDirection: "row",
   },
   leftSide: {
     // backgroundColor: 'red',
@@ -204,12 +216,12 @@ const DashboardStyles = StyleSheet.create({
     left: 15,
   },
   rightSide: {
-    position: "relative",
+    // position: "relative",
     backgroundColor: "red",
-    width: 85,
+    width: 100,
     height: 70,
-    top: -50,
-    left: 300,
+    // top: -50,
+    // left: 300,
     borderLeftColor: "black",
     borderLeftWidth: 2,
   },
@@ -249,9 +261,16 @@ const DashboardStyles = StyleSheet.create({
   },
   todoAddDialog: {},
   todoSpace: {
-    position: 'relative',
+    position: "relative",
     left: 10,
     top: 50,
     width: 365,
+  },
+  noTodo : {
+    textAlign: 'center',
+    fontSize: 30,
+    color: 'grey',
+    lineHeight: 45,
+    marginTop: 50,
   },
 });
