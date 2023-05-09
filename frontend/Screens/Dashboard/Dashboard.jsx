@@ -51,6 +51,7 @@ const Dashboard = ({ navigation }) => {
       if (data.payload.message === "error") {
         alert("Error performing this task. Please try again !");
       }
+      setNewTodo({...newTodo, due_at: ''})
     });
     setVisibleTodoAdd(false);
   };
