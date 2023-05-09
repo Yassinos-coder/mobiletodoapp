@@ -6,11 +6,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useDispatch, useSelector } from "react-redux";
 import { AddUser } from "../../redux/UserReducer";
 import SignUpModal from "../../Modals/SignUpModal";
+import Loader from "../../Components/Loader";
 
-const Signup = ({navigation}) => {
+const Signup = ({ navigation }) => {
   const dispatch = useDispatch();
   const [newUser, setNewUser] = useState(new SignUpModal());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const isUserRequestLoading = useSelector((state) => state.UserReducer.status);
 
   const handleDatePicker = (event, selectedDate) => {
     setNewUser({ ...newUser, birthday: selectedDate.toLocaleDateString() });
@@ -18,14 +20,15 @@ const Signup = ({navigation}) => {
   };
 
   const handleSignUp = () => {
-    dispatch(AddUser({newUserData: newUser}))
+    dispatch(AddUser({ newUserData: newUser }));
     setTimeout(() => {
-        navigation.navigate('Home')
+      navigation.navigate("Home");
     }, 2000);
   };
 
   return (
     <SafeAreaView style={signupStyles.signup}>
+      <Loader visible={isUserRequestLoading === "pending" ? true : false} />
       <View style={signupStyles.signupTitleView}>
         <Text style={signupStyles.signupTitle}>Sign Up Screen</Text>
       </View>
@@ -80,7 +83,13 @@ const Signup = ({navigation}) => {
         <Button
           title="Sign Up"
           onPress={handleSignUp}
-          style={{ width: 200, height: 40, alignSelf: "center", marginTop: 10, backgroundColor: 'green'}}
+          style={{
+            width: 200,
+            height: 40,
+            alignSelf: "center",
+            marginTop: 10,
+            backgroundColor: "green",
+          }}
         />
       </View>
     </SafeAreaView>

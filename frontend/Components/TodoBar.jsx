@@ -34,6 +34,12 @@ export default function TodoBar(props) {
   );
 }
 
+TodoBar.defaultProps = {
+  created_at: 'Error Please Reload APP',
+  due_at: 'Error Please Reload APP',
+  task: 'Error Please Reload APP',
+};
+
 const todobarStyles = StyleSheet.create({
   taskBody: {
     backgroundColor: "#e6f2ff",

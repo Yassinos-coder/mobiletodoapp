@@ -20,6 +20,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { AddTodo, getUserTodos } from "../../redux/TodoReducer";
 import { useEffect } from "react";
 import TodoBar from "../../Components/TodoBar";
+import Loader from '../../Components/Loader'
 
 const Dashboard = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -34,6 +35,8 @@ const Dashboard = ({ navigation }) => {
   const TodayDate = date.toLocaleDateString("en-GB");
   const [newTodo, setNewTodo] = useState(new TodoModal());
   const uuid = AsyncStorage.getItem("uuid");
+  const isUserRequestLoading = useSelector((state) => state.UserReducer.status)
+  const isTodoRequestLoading = useSelector((state) => state.TodoReducer.status)
 
   useEffect(() => {
     dispatch(getUserTodos({ uuid: userData._id }));
@@ -61,6 +64,7 @@ const Dashboard = ({ navigation }) => {
   return (
     <Provider>
       <SafeAreaView style={DashboardStyles.Dashboard}>
+      <Loader visible={isUserRequestLoading === 'pending' || isTodoRequestLoading === 'pending' ? true : false}/>
         <View style={DashboardStyles.header}>
           <View style={DashboardStyles.leftSide}>
             <Image
